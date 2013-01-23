@@ -152,6 +152,7 @@ module ActiveRecord
       SUPPORTED_VERSIONS          = [2000,2005,2008].freeze
       LIMITABLE_TYPES             = ['string','integer','float','char','nchar','varchar','nvarchar'].to_set.freeze
       QUOTED_TRUE, QUOTED_FALSE   = '1', '0'
+      QUOTED_STRING_PREFIX        = 'N'
       LOST_CONNECTION_EXCEPTIONS  = {
         :dblib  => ['TinyTds::Error'],
         :odbc   => ['ODBC::Error'],
@@ -269,13 +270,17 @@ module ActiveRecord
           if column && column.type == :binary
             column.class.string_to_binary(value)
           elsif value.is_utf8? || (column && column.type == :string)
-            "N'#{quote_string(value)}'"
+            "#{quoted_string_prefix}'#{quote_string(value)}'"
           else
             super
           end
         else
           super
         end
+      end
+
+      def quoted_string_prefix
+        config[:quoted_string_prefix].present? ? config[:quoted_string_prefix] : QUOTED_STRING_PREFIX
       end
       
       def quote_string(string)
