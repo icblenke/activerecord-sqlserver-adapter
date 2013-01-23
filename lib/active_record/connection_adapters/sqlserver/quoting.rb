@@ -34,7 +34,7 @@ module ActiveRecord
         end
         
         def quoted_string_prefix
-          QUOTED_STRING_PREFIX
+          config[:quoted_string_prefix].present? ? config[:quoted_string_prefix] : QUOTED_STRING_PREFIX
         end
         
         def quote_string(string)
