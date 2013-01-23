@@ -280,7 +280,7 @@ module ActiveRecord
       end
 
       def quoted_string_prefix
-        config[:quoted_string_prefix].present? ? config[:quoted_string_prefix] : QUOTED_STRING_PREFIX
+        @connection_options && @connection_options[:quoted_string_prefix].present? ? @connection_options[:quoted_string_prefix] : QUOTED_STRING_PREFIX
       end
       
       def quote_string(string)
